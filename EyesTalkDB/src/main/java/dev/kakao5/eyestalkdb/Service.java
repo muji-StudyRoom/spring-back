@@ -1,4 +1,4 @@
 package dev.kakao5.eyestalkdb;
 
-public class test {
+public class Service {
 }
