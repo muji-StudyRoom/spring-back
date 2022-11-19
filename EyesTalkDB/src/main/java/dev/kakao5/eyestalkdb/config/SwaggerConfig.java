@@ -28,8 +28,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Muzi Study Room API")
-                .description("무지 공부방 API를 정리합니다")
+                .title("Eyes-Talk API")
+                .description("EyesTalk API를 정리합니다")
                 .version("1.0")
                 .build();
     }
