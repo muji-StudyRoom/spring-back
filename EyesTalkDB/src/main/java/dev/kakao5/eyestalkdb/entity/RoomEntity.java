@@ -16,10 +16,12 @@ public class RoomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
     private Long room_id;
+    @Column(name = "room_name", length = 100, unique = true)
     private String room_name;
+    @Column(name = "room_password", length = 100)
     private String room_password;
-    private int room_capacity;
-    private int room_enter_user;
+    private int room_capacity; //지정 인원
+    private int room_enter_user; //입장한 인원
 
     @CreatedDate
     private LocalDateTime room_create_at;
