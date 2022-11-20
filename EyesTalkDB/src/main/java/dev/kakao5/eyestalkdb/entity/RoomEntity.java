@@ -28,13 +28,6 @@ public class RoomEntity {
     @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     private LocalDateTime room_create_at;
 
-    @ManyToOne(
-            fetch = FetchType.LAZY,
-            targetEntity = UserEntity.class
-    )
-    @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
-
     protected RoomEntity() {
     }
 
@@ -45,7 +38,6 @@ public class RoomEntity {
         this.room_password = room_password;
         this.room_capacity = room_capacity;
         this.room_enter_user = room_enter_user;
-        this.userEntity = userEntity;
         this.room_create_at=room_create_at;
     }
 

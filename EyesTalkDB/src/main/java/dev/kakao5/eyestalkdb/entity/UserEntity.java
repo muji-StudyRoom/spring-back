@@ -21,13 +21,21 @@ public class UserEntity {
     @CreatedDate
     private LocalDateTime user_create_at;
 
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            targetEntity = RoomEntity.class
+    )
+    @JoinColumn(name = "room_id")
+    private RoomEntity roomEntity;
+
     protected UserEntity() {
     }
 
     @Builder
-    public UserEntity(Long userId, String user_nickname, LocalDateTime user_create_at) {
+    public UserEntity(Long userId, String user_nickname, LocalDateTime user_create_at, RoomEntity roomEntity) {
         this.userId = userId;
         this.user_nickname = user_nickname;
         this.user_create_at= user_create_at;
+        this.roomEntity= roomEntity;
     }
 }
