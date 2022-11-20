@@ -1,6 +1,8 @@
 package dev.kakao5.eyestalkdb.controller;
 
+import dev.kakao5.eyestalkdb.dto.CommonDto;
 import dev.kakao5.eyestalkdb.dto.RoomDto;
+import dev.kakao5.eyestalkdb.service.CommonService;
 import dev.kakao5.eyestalkdb.service.RoomServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +16,13 @@ import java.util.List;
 public class RoomController {
     private final RoomServiceImpl roomService;
 
+
     @PostMapping
     public ResponseEntity<RoomDto> createRoom(@RequestBody RoomDto dto){
         RoomDto result = this.roomService.createRoom(dto);
         return ResponseEntity.ok(result);
     }
+
 
     @DeleteMapping("/{roomId}")
     public ResponseEntity<?> deleteRoom(@PathVariable("roomId") Long roomId){
