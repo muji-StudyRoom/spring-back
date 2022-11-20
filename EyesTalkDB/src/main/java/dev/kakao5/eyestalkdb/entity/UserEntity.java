@@ -16,7 +16,6 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
-    @Column(name = "user_nickname", length = 50, unique = true)
     private String user_nickname;
 
     @CreatedDate
