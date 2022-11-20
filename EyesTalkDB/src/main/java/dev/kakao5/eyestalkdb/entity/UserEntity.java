@@ -3,6 +3,7 @@ package dev.kakao5.eyestalkdb.entity;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class UserEntity {
     private Long userId;
     private String user_nickname;
 
-    @CreatedDate
+    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     private LocalDateTime user_create_at;
 
     @ManyToOne(

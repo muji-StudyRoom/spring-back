@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserServiceInterface{
     public UserDto createUser(UserDto dto) {
         UserEntity createUser = UserEntity.builder()
                 .user_nickname(dto.getUser_nickname())
+                .user_create_at(LocalDateTime.now())
                 .build();
 
         UserEntity save = userRepository.save(createUser);
