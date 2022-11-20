@@ -13,10 +13,10 @@ public interface RoomServiceInterface {
     // 방 삭제
     boolean deleteRoom(Long roomId);
 
-//    // 전체 방 조회
+    // 전체 방 조회
     List<RoomDto> getAllRoom();
-//
-//    // 방 검색
-//    List<RoomDto> searchRoom(String room_name);
+
+    // 방 검색
+    List<RoomDto> searchRoom(String room_name);
 
 }

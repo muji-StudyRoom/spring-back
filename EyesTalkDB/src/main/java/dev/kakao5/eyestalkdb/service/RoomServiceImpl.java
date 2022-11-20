@@ -35,7 +35,7 @@ public class RoomServiceImpl implements RoomServiceInterface {
         RoomEntity save = roomRepository.save(createRoom);
         RoomDto roomDto = RoomDto.builder()
                 .room_id(createRoom.getRoomId())
-                .room_name(createRoom.getRoom_name())
+                .room_name(createRoom.getRoomName())
                 .room_password(createRoom.getRoom_password())
                 .room_capacity(createRoom.getRoom_capacity())
                 .room_enter_user(createRoom.getRoom_enter_user())
@@ -64,7 +64,7 @@ public class RoomServiceImpl implements RoomServiceInterface {
         return roomRepository.findAll().stream()
                 .map(roomEntity -> RoomDto.builder()
                         .room_id(roomEntity.getRoomId())
-                        .room_name(roomEntity.getRoom_name())
+                        .room_name(roomEntity.getRoomName())
                         .room_password(roomEntity.getRoom_password())
                         .room_capacity(roomEntity.getRoom_capacity())
                         .room_enter_user(roomEntity.getRoom_enter_user())
@@ -72,9 +72,22 @@ public class RoomServiceImpl implements RoomServiceInterface {
                         .build())
                 .collect(Collectors.toList());
     }
-//
-//    @Override
-//    public List<RoomDto> searchRoom(String room_name) {
-//
-//    }
+
+    @Override
+    public List<RoomDto> searchRoom(String room_name) {
+        if(roomRepository.findByRoomName(room_name).isEmpty()){
+            throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
+        }
+
+        return roomRepository.findByRoomName(room_name).stream()
+                .map(roomEntity -> RoomDto.builder()
+                        .room_id(roomEntity.getRoomId())
+                        .room_name(roomEntity.getRoomName())
+                        .room_password(roomEntity.getRoom_password())
+                        .room_capacity(roomEntity.getRoom_capacity())
+                        .room_enter_user(roomEntity.getRoom_enter_user())
+                        .room_create_at(roomEntity.getRoom_create_at())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }

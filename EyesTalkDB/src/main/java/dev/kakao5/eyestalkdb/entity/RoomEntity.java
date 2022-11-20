@@ -19,7 +19,7 @@ public class RoomEntity {
     @Column(name = "room_id")
     private Long roomId;
     @Column(name = "room_name", length = 100)
-    private String room_name;
+    private String roomName;
     @Column(name = "room_password", length = 100)
     private String room_password;
     private int room_capacity; //지정 인원
@@ -34,7 +34,7 @@ public class RoomEntity {
     @Builder
     public RoomEntity(Long room_id, String room_name, String room_password, int room_capacity, int room_enter_user, UserEntity userEntity, LocalDateTime room_create_at ) {
         this.roomId = room_id;
-        this.room_name = room_name;
+        this.roomName = room_name;
         this.room_password = room_password;
         this.room_capacity = room_capacity;
         this.room_enter_user = room_enter_user;
