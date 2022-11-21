@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -139,7 +138,44 @@ public class CommonService {
                 .build();
 
         return result;
-
     }
+
+
+    //방 나가기 + 방 삭제
+    public boolean closeRoom(Long roomId, Long userId){
+        //todo: 코드 수정 필요
+        Optional<RoomEntity> room = roomRepository.findById(roomId);
+        Optional<UserEntity> userEntity = userRepository.findById(userId);
+
+        // roomId check
+        if (!roomRepository.existsById(roomId))
+            throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
+
+        // userId check
+        if(!userRepository.existsById(userId))
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+
+        // 인원 검사 {지정인원이 0이면 방 삭제, 허용인원보다 적고 0이 아니면 -1}
+        if(room.get().getRoomEnterUser() > 1){
+            //유저만 삭제 , 방 정보 변경
+            room.get().setRoomEnterUser(room.get().getRoomEnterUser()-1);
+            RoomEntity updateRoom = RoomEntity.builder()
+                    .roomId(roomId)
+                    .roomName(room.get().getRoomName())
+                    .roomCapacity(room.get().getRoomCapacity())
+                    .roomPassword(room.get().getRoomPassword())
+                    .roomEnterUser(room.get().getRoomEnterUser())
+                    .roomCreateAt(room.get().getRoomCreateAt())
+                    .build();
+            RoomEntity roomSave = roomRepository.save(updateRoom);
+            userRepository.delete(userEntity.get());
+        }else{
+            //유저 삭제, 방 삭제 동시 진행
+            roomRepository.delete(room.get());
+            userRepository.delete(userEntity.get());
+        }
+        return true;
+    }
+
 
 }

@@ -3,7 +3,6 @@ package dev.kakao5.eyestalkdb.exception;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
-
 import java.time.LocalDateTime;
 
 @Getter

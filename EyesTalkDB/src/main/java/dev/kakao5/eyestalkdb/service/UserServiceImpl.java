@@ -4,12 +4,10 @@ import dev.kakao5.eyestalkdb.dto.UserDto;
 import dev.kakao5.eyestalkdb.entity.UserEntity;
 import dev.kakao5.eyestalkdb.exception.CustomException;
 import dev.kakao5.eyestalkdb.exception.ErrorCode;
-import dev.kakao5.eyestalkdb.exception.GlobalExceptionHandler;
 import dev.kakao5.eyestalkdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 

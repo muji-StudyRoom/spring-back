@@ -1,8 +1,6 @@
 package dev.kakao5.eyestalkdb.controller;
 
-import dev.kakao5.eyestalkdb.dto.CommonDto;
 import dev.kakao5.eyestalkdb.dto.RoomDto;
-import dev.kakao5.eyestalkdb.service.CommonService;
 import dev.kakao5.eyestalkdb.service.RoomServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

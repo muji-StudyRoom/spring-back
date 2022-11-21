@@ -33,11 +33,6 @@ public class CommonController {
         return ResponseEntity.ok(result);
     }
 
-
-    //방 나가기
-
-
-
     // 방 입장 + 유저 생성
     @PostMapping("/{roomId}/enter/{roomPassword}")
     public ResponseEntity<CommonDto> enterRoom(@RequestBody UserDto dto,
@@ -47,4 +42,10 @@ public class CommonController {
         return ResponseEntity.ok(result);
     }
 
+    // 방 나가기 + 방 삭제
+    @PatchMapping("/{roomId}")
+    public ResponseEntity<?> closeRoom(@PathVariable("roomId") Long roomId,
+                                               @RequestParam Long userId ){
+        return ResponseEntity.ok(commonService.closeRoom(roomId, userId));
+    }
 }

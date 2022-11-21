@@ -7,11 +7,8 @@ import dev.kakao5.eyestalkdb.exception.ErrorCode;
 import dev.kakao5.eyestalkdb.repository.RoomRepository;
 import dev.kakao5.eyestalkdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = false)
+@Transactional
 public class RoomServiceImpl implements RoomServiceInterface {
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
@@ -58,6 +55,7 @@ public class RoomServiceImpl implements RoomServiceInterface {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RoomDto> getAllRoom() {
         if(roomRepository.findAll().isEmpty()){
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
@@ -76,6 +74,7 @@ public class RoomServiceImpl implements RoomServiceInterface {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RoomDto searchRoom(String room_name) {
         RoomEntity findRoom = roomRepository.findByRoomName(room_name);
         if(findRoom == null){

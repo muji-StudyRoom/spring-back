@@ -2,10 +2,7 @@ package dev.kakao5.eyestalkdb.entity;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
