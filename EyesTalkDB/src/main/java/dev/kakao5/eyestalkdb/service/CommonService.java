@@ -1,6 +1,7 @@
 package dev.kakao5.eyestalkdb.service;
 
 import dev.kakao5.eyestalkdb.dto.CommonDto;
+import dev.kakao5.eyestalkdb.dto.UserDto;
 import dev.kakao5.eyestalkdb.entity.RoomEntity;
 import dev.kakao5.eyestalkdb.entity.UserEntity;
 import dev.kakao5.eyestalkdb.exception.CustomException;
@@ -78,4 +79,52 @@ public class CommonService {
 
         return dto;
     }
+
+    // room enter 시 user 생성
+    public CommonDto enterRoom(UserDto dto, Long roomId,String roomPassword){
+
+        // room 찾기
+        RoomEntity room = roomRepository.findById(roomId).get();
+
+        // 비밀번호 확인
+        if(!room.getRoomPassword().equals(roomPassword)){
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        // 닉네임 중복 검사
+        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
+        if(duplicateUser!=null && duplicateUser.getRoomEntity().getRoomId().equals(roomId)){
+            throw new CustomException(ErrorCode.INVALID_NICKNAME);
+        }
+
+        // 인원 검사
+        if(room.getRoomCapacity() == room.getRoomEnterUser()){
+            throw new CustomException(ErrorCode.FULL_CAPACITY);
+        }
+
+        // 유저 생성
+        UserEntity createUser = UserEntity.builder()
+                .userNickname(dto.getUserNickname())
+                .userCreateAt(LocalDateTime.now())
+                .roomEntity(room)
+                .build();
+
+        UserEntity save = userRepository.save(createUser);
+        room.setRoomEnterUser(room.getRoomEnterUser()+1);
+
+        CommonDto result = CommonDto.builder()
+                .userId(createUser.getUserId())
+                .userNickname(createUser.getUserNickname())
+                .userCreateAt(createUser.getUserCreateAt())
+                .roomId(room.getRoomId())
+                .roomPassword(room.getRoomPassword())
+                .roomCapacity(room.getRoomCapacity())
+                .roomEnterUser(room.getRoomEnterUser()+1)
+                .roomCreateAt(room.getRoomCreateAt())
+                .build();
+
+        return result;
+
+    }
+
 }
