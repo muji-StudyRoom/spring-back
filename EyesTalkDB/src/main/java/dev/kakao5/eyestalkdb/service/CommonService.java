@@ -94,6 +94,9 @@ public class CommonService {
 
     // room enter 시 user 생성
     public CommonDto enterRoom(UserDto dto, Long roomId,String roomPassword){
+        //room id 확인
+        if (!roomRepository.existsById(roomId))
+            throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
 
         // room 찾기
         RoomEntity room = roomRepository.findById(roomId).get();
