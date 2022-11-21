@@ -14,11 +14,13 @@ import java.util.List;
 public class RoomController {
     private final RoomServiceImpl roomService;
 
-    @PostMapping
-    public ResponseEntity<RoomDto> createRoom(@RequestBody RoomDto dto){
-        RoomDto result = this.roomService.createRoom(dto);
-        return ResponseEntity.ok(result);
-    }
+
+//    @PostMapping
+//    public ResponseEntity<RoomDto> createRoom(@RequestBody RoomDto dto){
+//        RoomDto result = this.roomService.createRoom(dto);
+//        return ResponseEntity.ok(result);
+//    }
+
 
     @DeleteMapping("/{roomId}")
     public ResponseEntity<?> deleteRoom(@PathVariable("roomId") Long roomId){
@@ -39,14 +41,16 @@ public class RoomController {
         }
     }
 
-    @GetMapping("{room_name}")
-    public ResponseEntity<List<RoomDto>> searchRoom(@PathVariable("room_name") String room_name){
-        List<RoomDto> roomDtoList = this.roomService.searchRoom(room_name);
+
+    @GetMapping("{roomName}")
+    public ResponseEntity<RoomDto> searchRoom(@PathVariable("roomName") String room_name){
+        RoomDto roomDtoList = this.roomService.searchRoom(room_name);
         if(roomDtoList == null){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(roomDtoList);
-
     }
+
+
 
 }

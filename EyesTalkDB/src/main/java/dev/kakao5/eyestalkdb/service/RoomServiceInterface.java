@@ -1,7 +1,7 @@
 package dev.kakao5.eyestalkdb.service;
 
 import dev.kakao5.eyestalkdb.dto.RoomDto;
-import dev.kakao5.eyestalkdb.dto.UserDto;
+
 
 import java.util.List;
 
@@ -17,6 +17,6 @@ public interface RoomServiceInterface {
     List<RoomDto> getAllRoom();
 
     // 방 검색
-    List<RoomDto> searchRoom(String room_name);
+    RoomDto searchRoom(String room_name);
 
 }

@@ -9,7 +9,11 @@ import java.time.LocalDateTime;
 @Getter
 @Slf4j
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RoomDto {
+public class CommonDto {
+    private final Long userId;
+    private final String userNickname;
+    private final LocalDateTime userCreateAt;
+
     private final Long roomId;
     private final String roomName;
     private final String roomPassword;
@@ -18,12 +22,15 @@ public class RoomDto {
     private final LocalDateTime roomCreateAt;
 
     @Builder
-    public RoomDto(Long roomId, String roomName, String roomPassword, int roomCapacity, int roomEnterUser, LocalDateTime roomCreateAt) {
+    public CommonDto(Long userId, String userNickname, LocalDateTime userCreateAt, Long roomId, String roomName, String roomPassword, int roomCapacity, int roomEnterUser, LocalDateTime roomCreateAt) {
+        this.userId = userId;
+        this.userNickname = userNickname;
+        this.userCreateAt = userCreateAt;
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomPassword = roomPassword;
         this.roomCapacity = roomCapacity;
         this.roomEnterUser = roomEnterUser;
-        this.roomCreateAt= roomCreateAt;
+        this.roomCreateAt = roomCreateAt;
     }
 }

@@ -2,9 +2,7 @@ package dev.kakao5.eyestalkdb.entity;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -17,10 +15,13 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
-    private String user_nickname;
 
+    @Column(name = "user_nickname")
+    private String userNickname;
+
+    @Column(name = "user_create_at")
     @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
-    private LocalDateTime user_create_at;
+    private LocalDateTime userCreateAt;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -33,10 +34,10 @@ public class UserEntity {
     }
 
     @Builder
-    public UserEntity(Long userId, String user_nickname, LocalDateTime user_create_at, RoomEntity roomEntity) {
+    public UserEntity(Long userId, String userNickname, LocalDateTime userCreateAt, RoomEntity roomEntity) {
         this.userId = userId;
-        this.user_nickname = user_nickname;
-        this.user_create_at= user_create_at;
+        this.userNickname = userNickname;
+        this.userCreateAt= userCreateAt;
         this.roomEntity= roomEntity;
     }
 }
