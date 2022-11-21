@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
 
-    RoomEntity findByRoomName(String room_name);
+    RoomEntity findByRoomName(String roomName);
+    boolean existsByRoomName(String roomName);
 }

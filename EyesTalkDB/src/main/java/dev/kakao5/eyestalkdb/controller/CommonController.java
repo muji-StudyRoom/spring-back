@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController()
-@RequestMapping("test")
+@RequestMapping("room")
 public class CommonController {
 
     private final CommonService commonService;
 
-    //Test
+    //방 생성 + 유저 생성
     @PostMapping
     public ResponseEntity<CommonDto> createRoom(@RequestBody CommonDto dto){
-        CommonDto result = this.commonService.createRoom(dto);
+        CommonDto resultRoom = this.commonService.createRoom(dto);
+        CommonDto result  = this.commonService.createUser(resultRoom);
         return ResponseEntity.ok(result);
     }
-
 
 }

@@ -25,21 +25,21 @@ public class RoomServiceImpl implements RoomServiceInterface {
     @Override
     public RoomDto createRoom(RoomDto dto) {
         RoomEntity createRoom = RoomEntity.builder()
-                .room_name(dto.getRoom_name())
-                .room_password(dto.getRoom_password())
-                .room_capacity(dto.getRoom_capacity())
-                .room_enter_user(1)
-                .room_create_at(LocalDateTime.now())
+                .roomName(dto.getRoomName())
+                .roomPassword(dto.getRoomPassword())
+                .roomCapacity(dto.getRoomCapacity())
+                .roomEnterUser(1)
+                .roomCreateAt(LocalDateTime.now())
                 .build();
 
         RoomEntity save = roomRepository.save(createRoom);
         RoomDto roomDto = RoomDto.builder()
-                .room_id(createRoom.getRoomId())
-                .room_name(createRoom.getRoomName())
-                .room_password(createRoom.getRoom_password())
-                .room_capacity(createRoom.getRoom_capacity())
-                .room_enter_user(createRoom.getRoom_enter_user())
-                .room_create_at(createRoom.getRoom_create_at())
+                .roomId(createRoom.getRoomId())
+                .roomName(createRoom.getRoomName())
+                .roomPassword(createRoom.getRoomPassword())
+                .roomCapacity(createRoom.getRoomCapacity())
+                .roomEnterUser(createRoom.getRoomEnterUser())
+                .roomCreateAt(createRoom.getRoomCreateAt())
                 .build();
 
         return roomDto;
@@ -63,12 +63,12 @@ public class RoomServiceImpl implements RoomServiceInterface {
 
         return roomRepository.findAll().stream()
                 .map(roomEntity -> RoomDto.builder()
-                        .room_id(roomEntity.getRoomId())
-                        .room_name(roomEntity.getRoomName())
-                        .room_password(roomEntity.getRoom_password())
-                        .room_capacity(roomEntity.getRoom_capacity())
-                        .room_enter_user(roomEntity.getRoom_enter_user())
-                        .room_create_at(roomEntity.getRoom_create_at())
+                        .roomId(roomEntity.getRoomId())
+                        .roomName(roomEntity.getRoomName())
+                        .roomPassword(roomEntity.getRoomPassword())
+                        .roomCapacity(roomEntity.getRoomCapacity())
+                        .roomEnterUser(roomEntity.getRoomEnterUser())
+                        .roomCreateAt(roomEntity.getRoomCreateAt())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -81,12 +81,12 @@ public class RoomServiceImpl implements RoomServiceInterface {
         }
 
         RoomDto roomDto = RoomDto.builder()
-                .room_id(findRoom.getRoomId())
-                .room_name(findRoom.getRoomName())
-                .room_password(findRoom.getRoom_password())
-                .room_capacity(findRoom.getRoom_capacity())
-                .room_enter_user(findRoom.getRoom_enter_user())
-                .room_create_at(findRoom.getRoom_create_at())
+                .roomId(findRoom.getRoomId())
+                .roomName(findRoom.getRoomName())
+                .roomPassword(findRoom.getRoomPassword())
+                .roomCapacity(findRoom.getRoomCapacity())
+                .roomEnterUser(findRoom.getRoomEnterUser())
+                .roomCreateAt(findRoom.getRoomCreateAt())
                 .build();
 
         return roomDto;

@@ -3,6 +3,8 @@ package dev.kakao5.eyestalkdb.service;
 import dev.kakao5.eyestalkdb.dto.CommonDto;
 import dev.kakao5.eyestalkdb.entity.RoomEntity;
 import dev.kakao5.eyestalkdb.entity.UserEntity;
+import dev.kakao5.eyestalkdb.exception.CustomException;
+import dev.kakao5.eyestalkdb.exception.ErrorCode;
 import dev.kakao5.eyestalkdb.repository.RoomRepository;
 import dev.kakao5.eyestalkdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,47 +21,61 @@ public class CommonService {
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
 
+    // room 생성
     public CommonDto createRoom(CommonDto dto) {
         //room이 있는지 확인
-        if (roomRepository.findByRoomName(dto.getRoom_name()) == null){
-          //없으면 room 생성
-            RoomEntity createRoom = RoomEntity.builder()
-                    .room_name(dto.getRoom_name())
-                    .room_password(dto.getRoom_password())
-                    .room_capacity(dto.getRoom_capacity())
-                    .room_enter_user(1)
-                    .room_create_at(LocalDateTime.now())
-                    .build();
-            RoomEntity roomSave = roomRepository.save(createRoom);
-
-            //유저 생성
-            UserEntity createUser = UserEntity.builder()
-                    .user_nickname(dto.getUser_nickname())
-                    .user_create_at(LocalDateTime.now())
-                    .roomEntity(RoomEntity.builder()
-                            .room_id(dto.getRoom_id())
-                            .build())
-                    .build();
-            UserEntity userSave = userRepository.save(createUser);
-        }else{
-            // todo: if => 룸 비밀번호 확인 valid 필요
-           //있으면 유저 생성하면서 FK로 room_id를 넣기
-            UserEntity joinUser = UserEntity.builder()
-                    .user_nickname(dto.getUser_nickname())
-                    .user_create_at(LocalDateTime.now())
-                    .roomEntity(RoomEntity.builder()
-                            .room_id(dto.getRoom_id())
-                            .build())
-                    .build();
-            UserEntity userSave = userRepository.save(joinUser);
+        if (roomRepository.existsByRoomName(dto.getRoomName())) {
+            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
 
-        //저장된 값을 가져와야하는데 위의 True, False에 따라 달라짐...
+        //없으면 room 생성
+        RoomEntity createRoom = RoomEntity.builder()
+                .roomName(dto.getRoomName())
+                .roomPassword(dto.getRoomPassword())
+                .roomCapacity(dto.getRoomCapacity())
+                .roomEnterUser(1)
+                .roomCreateAt(LocalDateTime.now())
+                .build();
+        RoomEntity roomSave = roomRepository.save(createRoom);
+
         CommonDto commonDto = CommonDto.builder()
+                .roomName(createRoom.getRoomName())
+                .roomId(createRoom.getRoomId())
+                .roomPassword(createRoom.getRoomPassword())
+                .roomCreateAt(createRoom.getRoomCreateAt())
+                .roomCapacity(createRoom.getRoomCapacity())
+                .roomEnterUser(createRoom.getRoomEnterUser())
+                .userNickname(dto.getUserNickname())
                 .build();
 
-    return commonDto;
+        return commonDto;
     }
 
+    // room 생성 시 user 생성
+    public CommonDto createUser(CommonDto dto){
 
+        // 닉네임 중복 검사
+        if(userRepository.existsByUserNickname(dto.getUserNickname())){
+            throw new CustomException(ErrorCode.INVALID_NICKNAME);
+        }
+
+        // 유저 생성 (방장)
+        RoomEntity room = roomRepository.findById(dto.getRoomId()).get();
+
+        UserEntity createUser = UserEntity.builder()
+                .userNickname(dto.getUserNickname())
+                .userCreateAt(LocalDateTime.now())
+                .roomEntity(room)
+                .build();
+
+        UserEntity save = userRepository.save(createUser);
+
+        dto = CommonDto.builder()
+                .userId(createUser.getUserId())
+                .userNickname(createUser.getUserNickname())
+                .userCreateAt(createUser.getUserCreateAt())
+                .build();
+
+        return dto;
+    }
 }

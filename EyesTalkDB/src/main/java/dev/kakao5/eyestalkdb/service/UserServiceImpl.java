@@ -23,15 +23,15 @@ public class UserServiceImpl implements UserServiceInterface{
     @Override
     public UserDto createUser(UserDto dto) {
         UserEntity createUser = UserEntity.builder()
-                .user_nickname(dto.getUser_nickname())
-                .user_create_at(LocalDateTime.now())
+                .userNickname(dto.getUserNickname())
+                .userCreateAt(LocalDateTime.now())
                 .build();
 
         UserEntity save = userRepository.save(createUser);
         UserDto userDto = UserDto.builder()
-                .user_id(createUser.getUserId())
-                .user_nickname(createUser.getUser_nickname())
-                .user_create_at(createUser.getUser_create_at())
+                .userId(createUser.getUserId())
+                .userNickname(createUser.getUserNickname())
+                .userCreateAt(createUser.getUserCreateAt())
                 .build();
 
         return userDto;
