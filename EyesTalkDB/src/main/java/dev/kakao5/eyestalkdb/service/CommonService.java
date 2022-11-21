@@ -8,6 +8,8 @@ import dev.kakao5.eyestalkdb.exception.ErrorCode;
 import dev.kakao5.eyestalkdb.repository.RoomRepository;
 import dev.kakao5.eyestalkdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class CommonService {
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
+    Logger logger = LoggerFactory.getLogger(CommonService.class);
 
     // room 생성
     public CommonDto createRoom(CommonDto dto) {
@@ -27,6 +30,10 @@ public class CommonService {
         if (roomRepository.existsByRoomName(dto.getRoomName())) {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
+
+//        if (userRepository.existsByUserNickname(dto.getUserNickname())){
+//            throw new CustomException(ErrorCode.INVALID_NICKNAME);
+//        }
 
         //없으면 room 생성
         RoomEntity createRoom = RoomEntity.builder()
@@ -37,6 +44,8 @@ public class CommonService {
                 .roomCreateAt(LocalDateTime.now())
                 .build();
         RoomEntity roomSave = roomRepository.save(createRoom);
+        logger.info("방 허용 입력값: {}", createRoom.getRoomCapacity());
+        logger.info("방 입장인원 입력값: {}", createRoom.getRoomEnterUser());
 
         CommonDto commonDto = CommonDto.builder()
                 .roomName(createRoom.getRoomName())
@@ -47,6 +56,8 @@ public class CommonService {
                 .roomEnterUser(createRoom.getRoomEnterUser())
                 .userNickname(dto.getUserNickname())
                 .build();
+        logger.info("방 허용 저장값: {}", commonDto.getRoomCapacity());
+        logger.info("방 입장인원 저장값: {}", commonDto.getRoomEnterUser());
 
         return commonDto;
     }
@@ -74,8 +85,9 @@ public class CommonService {
                 .userId(createUser.getUserId())
                 .userNickname(createUser.getUserNickname())
                 .userCreateAt(createUser.getUserCreateAt())
+                .roomCapacity(room.getRoomCapacity())
+                .roomEnterUser(room.getRoomEnterUser())
                 .build();
-
         return dto;
     }
 }

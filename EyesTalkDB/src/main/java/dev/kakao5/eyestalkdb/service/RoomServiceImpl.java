@@ -7,6 +7,8 @@ import dev.kakao5.eyestalkdb.exception.ErrorCode;
 import dev.kakao5.eyestalkdb.repository.RoomRepository;
 import dev.kakao5.eyestalkdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,7 +90,6 @@ public class RoomServiceImpl implements RoomServiceInterface {
                 .roomEnterUser(findRoom.getRoomEnterUser())
                 .roomCreateAt(findRoom.getRoomCreateAt())
                 .build();
-
         return roomDto;
     }
 }
