@@ -20,7 +20,7 @@ public class CommonService {
 
     public CommonDto createRoom(CommonDto dto) {
         //room이 있는지 확인
-        if (roomRepository.findByRoomName(dto.getRoom_name()).isEmpty()){
+        if (roomRepository.findByRoomName(dto.getRoom_name()) == null){
           //없으면 room 생성
             RoomEntity createRoom = RoomEntity.builder()
                     .room_name(dto.getRoom_name())

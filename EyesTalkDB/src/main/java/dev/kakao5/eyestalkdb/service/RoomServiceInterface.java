@@ -17,6 +17,6 @@ public interface RoomServiceInterface {
     List<RoomDto> getAllRoom();
 
     // 방 검색
-    List<RoomDto> searchRoom(String room_name);
+    RoomDto searchRoom(String room_name);
 
 }
