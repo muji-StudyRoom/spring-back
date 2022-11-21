@@ -2,6 +2,7 @@ package dev.kakao5.eyestalkdb.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
@@ -35,6 +36,10 @@ public class RoomEntity {
     private LocalDateTime roomCreateAt;
 
     protected RoomEntity() {
+    }
+
+    public void setRoomEnterUser(int roomEnterUser) {
+        this.roomEnterUser = roomEnterUser;
     }
 
     @Builder

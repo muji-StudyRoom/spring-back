@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserServiceInterface{
 
     @Override
     public UserDto createUser(UserDto dto) {
+
         UserEntity createUser = UserEntity.builder()
                 .userNickname(dto.getUserNickname())
                 .userCreateAt(LocalDateTime.now())
