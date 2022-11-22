@@ -35,6 +35,8 @@ public class CommonService {
 //            throw new CustomException(ErrorCode.INVALID_NICKNAME);
 //        }
 
+        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
+
         //없으면 room 생성
         RoomEntity createRoom = RoomEntity.builder()
                 .roomName(dto.getRoomName())
@@ -43,7 +45,20 @@ public class CommonService {
                 .roomEnterUser(1)
                 .roomCreateAt(LocalDateTime.now())
                 .build();
+
+
         RoomEntity roomSave = roomRepository.save(createRoom);
+
+        if(duplicateUser!=null){
+            System.out.println("로그 :"+duplicateUser.getRoomEntity().getRoomId()+ " "+ createRoom.getRoomId());
+        }
+
+        if(duplicateUser!=null && duplicateUser.getRoomEntity().getRoomId().equals(createRoom.getRoomId())){
+            //지워야 함 (room)
+            roomRepository.delete(createRoom);
+            throw new CustomException(ErrorCode.INVALID_NICKNAME);
+        }
+
         logger.info("방 허용 입력값: {}", createRoom.getRoomCapacity());
         logger.info("방 입장인원 입력값: {}", createRoom.getRoomEnterUser());
 
@@ -66,7 +81,8 @@ public class CommonService {
     public CommonDto createUser(CommonDto dto){
 
         // 닉네임 중복 검사
-        if(userRepository.existsByUserNickname(dto.getUserNickname())){
+        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
+        if(duplicateUser!=null && duplicateUser.getRoomEntity().getRoomId().equals(dto.getRoomId())){
             throw new CustomException(ErrorCode.INVALID_NICKNAME);
         }
 
