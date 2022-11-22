@@ -14,11 +14,14 @@ public class UserDto {
     private final String userNickname;
     private final LocalDateTime userCreateAt;
 
+    private final String socketId;
+
     @Builder
-    public UserDto(Long userId, String userNickname, LocalDateTime userCreateAt) {
+    public UserDto(Long userId, String userNickname, LocalDateTime userCreateAt, String socketId) {
         this.userId = userId;
         this.userNickname = userNickname;
         this.userCreateAt= userCreateAt;
+        this.socketId= socketId;
     }
 
 

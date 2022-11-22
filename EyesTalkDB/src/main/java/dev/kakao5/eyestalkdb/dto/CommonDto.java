@@ -21,8 +21,10 @@ public class CommonDto {
     private final int roomEnterUser;
     private final LocalDateTime roomCreateAt;
 
+    private final String socketId;
+
     @Builder
-    public CommonDto(Long userId, String userNickname, LocalDateTime userCreateAt, Long roomId, String roomName, String roomPassword, int roomCapacity, int roomEnterUser, LocalDateTime roomCreateAt) {
+    public CommonDto(Long userId, String userNickname, LocalDateTime userCreateAt, Long roomId, String roomName, String roomPassword, int roomCapacity, int roomEnterUser, LocalDateTime roomCreateAt, String socketId) {
         this.userId = userId;
         this.userNickname = userNickname;
         this.userCreateAt = userCreateAt;
@@ -32,5 +34,6 @@ public class CommonDto {
         this.roomCapacity = roomCapacity;
         this.roomEnterUser = roomEnterUser;
         this.roomCreateAt = roomCreateAt;
+        this.socketId= socketId;
     }
 }

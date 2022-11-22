@@ -30,14 +30,18 @@ public class UserEntity {
     @JoinColumn(name = "room_id")
     private RoomEntity roomEntity;
 
+    @JoinColumn(name="socket_id")
+    private String socketId;
+
     protected UserEntity() {
     }
 
     @Builder
-    public UserEntity(Long userId, String userNickname, LocalDateTime userCreateAt, RoomEntity roomEntity) {
+    public UserEntity(Long userId, String userNickname, LocalDateTime userCreateAt, RoomEntity roomEntity, String socketId) {
         this.userId = userId;
         this.userNickname = userNickname;
         this.userCreateAt= userCreateAt;
         this.roomEntity= roomEntity;
+        this.socketId = socketId;
     }
 }

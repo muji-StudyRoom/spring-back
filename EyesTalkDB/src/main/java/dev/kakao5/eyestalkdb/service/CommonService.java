@@ -70,7 +70,10 @@ public class CommonService {
                 .roomCapacity(createRoom.getRoomCapacity())
                 .roomEnterUser(createRoom.getRoomEnterUser())
                 .userNickname(dto.getUserNickname())
+                .socketId(dto.getSocketId())
                 .build();
+        logger.info("방 허용 저장값: {}", commonDto.getRoomCapacity());
+        logger.info("방 입장인원 저장값: {}", commonDto.getRoomEnterUser());
 
         return commonDto;
     }
@@ -91,6 +94,7 @@ public class CommonService {
                 .userNickname(dto.getUserNickname())
                 .userCreateAt(LocalDateTime.now())
                 .roomEntity(room)
+                .socketId(dto.getSocketId())
                 .build();
 
         UserEntity save = userRepository.save(createUser);
@@ -101,6 +105,7 @@ public class CommonService {
                 .userCreateAt(createUser.getUserCreateAt())
                 .roomCapacity(room.getRoomCapacity())
                 .roomEnterUser(room.getRoomEnterUser())
+                .socketId(dto.getSocketId())
                 .build();
         return dto;
     }
@@ -135,6 +140,7 @@ public class CommonService {
                 .userNickname(dto.getUserNickname())
                 .userCreateAt(LocalDateTime.now())
                 .roomEntity(room)
+                .socketId(dto.getSocketId())
                 .build();
 
         UserEntity save = userRepository.save(createUser);
@@ -149,6 +155,7 @@ public class CommonService {
                 .roomCapacity(room.getRoomCapacity())
                 .roomEnterUser(room.getRoomEnterUser())
                 .roomCreateAt(room.getRoomCreateAt())
+                .socketId(dto.getSocketId())
                 .build();
 
         return result;
@@ -157,7 +164,7 @@ public class CommonService {
 
     //방 나가기 + 방 삭제
     public boolean closeRoom(Long roomId, Long userId){
-
+        //todo: 코드 수정 필요
         Optional<RoomEntity> room = roomRepository.findById(roomId);
         Optional<UserEntity> userEntity = userRepository.findById(userId);
 

@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserServiceInterface{
         UserEntity createUser = UserEntity.builder()
                 .userNickname(dto.getUserNickname())
                 .userCreateAt(LocalDateTime.now())
+                .socketId(dto.getSocketId())
                 .build();
 
         UserEntity save = userRepository.save(createUser);
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserServiceInterface{
                 .userId(createUser.getUserId())
                 .userNickname(createUser.getUserNickname())
                 .userCreateAt(createUser.getUserCreateAt())
+                .socketId(dto.getSocketId())
                 .build();
 
         return userDto;
