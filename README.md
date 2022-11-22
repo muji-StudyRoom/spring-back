@@ -9,11 +9,14 @@
 ## ERD
 ![image](https://user-images.githubusercontent.com/80441723/203263365-83bf3ba1-2591-40ae-af8d-4cc55b395836.png)
 
-## 환경변수 설정해서 실행하기
+<br>
+
+## 도커 실행 설정 
 
 ---
 
-```bash
+### Properties
+```jsx
 spring.datasource.url=jdbc:mysql://mariadb:3306/eyestalk?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
 spring.datasource.username=${DATABASE-USERNAME}
 spring.datasource.password=${DATABASE-PASSWORD}
