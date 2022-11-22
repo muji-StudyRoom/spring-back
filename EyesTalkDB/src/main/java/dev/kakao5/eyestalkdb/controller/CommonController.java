@@ -26,10 +26,7 @@ public class CommonController {
     @PostMapping
     public ResponseEntity<CommonDto> createRoom(@RequestBody CommonDto dto){
         CommonDto resultRoom = this.commonService.createRoom(dto);
-        logger.info("controller-resultRoom 방 허용 입력값: {}", resultRoom.getRoomCapacity());
-
         CommonDto result  = this.commonService.createUser(resultRoom);
-        logger.info("controller-result 방 허용 입력값: {}", result.getRoomCapacity());
         return ResponseEntity.ok(result);
     }
 

@@ -71,8 +71,6 @@ public class CommonService {
                 .roomEnterUser(createRoom.getRoomEnterUser())
                 .userNickname(dto.getUserNickname())
                 .build();
-        logger.info("방 허용 저장값: {}", commonDto.getRoomCapacity());
-        logger.info("방 입장인원 저장값: {}", commonDto.getRoomEnterUser());
 
         return commonDto;
     }
@@ -159,7 +157,7 @@ public class CommonService {
 
     //방 나가기 + 방 삭제
     public boolean closeRoom(Long roomId, Long userId){
-        //todo: 코드 수정 필요
+
         Optional<RoomEntity> room = roomRepository.findById(roomId);
         Optional<UserEntity> userEntity = userRepository.findById(userId);
 
