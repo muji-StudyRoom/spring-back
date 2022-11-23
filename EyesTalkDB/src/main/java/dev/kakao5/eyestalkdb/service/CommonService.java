@@ -162,18 +162,20 @@ public class CommonService {
     }
 
 
-    //방 나가기 + 방 삭제
-    public boolean closeRoom(Long roomId, Long userId){
+    //방 나가기 + 방 삭제 => socketId 기준으로 로직처리 변경
+    public boolean closeRoom(String socketId){
         //todo: 코드 수정 필요
+
+        Optional<UserEntity> userEntity = userRepository.findBySocketId(socketId);
+        Long roomId = userEntity.get().getRoomEntity().getRoomId();
         Optional<RoomEntity> room = roomRepository.findById(roomId);
-        Optional<UserEntity> userEntity = userRepository.findById(userId);
 
         // roomId check
         if (!roomRepository.existsById(roomId))
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
 
         // userId check
-        if(!userRepository.existsById(userId))
+        if(!userRepository.existsBySocketId(socketId))
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
 
         // 인원 검사 {지정인원이 0이면 방 삭제, 허용인원보다 적고 0이 아니면 -1}

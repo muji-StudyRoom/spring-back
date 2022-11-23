@@ -65,10 +65,9 @@ public class CommonController {
         return ResponseEntity.ok().build();
     }
 
-    // 방 나가기 + 방 삭제
-    @PatchMapping("/{roomId}")
-    public ResponseEntity<?> closeRoom(@PathVariable("roomId") Long roomId,
-                                               @RequestParam Long userId ){
-        return ResponseEntity.ok(commonService.closeRoom(roomId, userId));
+    // 방 나가기 + 방 삭제 => socketId 로 로직처리하도록 실행
+    @PatchMapping()
+    public ResponseEntity<?> closeRoom(@RequestParam String socketId ){
+        return ResponseEntity.ok(commonService.closeRoom(socketId));
     }
 }
