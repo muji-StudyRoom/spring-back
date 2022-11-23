@@ -39,6 +39,8 @@ public class CommonController {
         return ResponseEntity.ok(result);
     }
 
+
+
     // 방 나가기 + 방 삭제
     @PatchMapping("/{roomId}")
     public ResponseEntity<?> closeRoom(@PathVariable("roomId") Long roomId,
