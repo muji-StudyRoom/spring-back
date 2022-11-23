@@ -27,7 +27,7 @@ public class UserEntity {
             fetch = FetchType.LAZY,
             targetEntity = RoomEntity.class
     )
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_idx")
     private RoomEntity roomEntity;
 
     @JoinColumn(name="socket_id")
