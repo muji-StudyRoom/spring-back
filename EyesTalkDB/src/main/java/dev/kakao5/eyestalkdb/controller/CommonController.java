@@ -4,6 +4,8 @@ package dev.kakao5.eyestalkdb.controller;
 import dev.kakao5.eyestalkdb.dto.CommonDto;
 import dev.kakao5.eyestalkdb.dto.RoomDto;
 import dev.kakao5.eyestalkdb.dto.UserDto;
+import dev.kakao5.eyestalkdb.exception.CustomException;
+import dev.kakao5.eyestalkdb.exception.ErrorResponse;
 import dev.kakao5.eyestalkdb.service.CommonService;
 import dev.kakao5.eyestalkdb.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.Socket;
 
 @RequiredArgsConstructor
 @RestController()
@@ -43,12 +47,22 @@ public class CommonController {
 
     // 방 입장 검증 => 이후 exception 으로 리펙토링 해야할듯
     @PostMapping("/valid/enter")
-    public ResponseEntity<Boolean> validationJoinRoom(@RequestBody CommonDto dto){
+    public ResponseEntity validationJoinRoom(@RequestBody CommonDto dto){
 
         logger.info("recive");
-        Boolean result = this.commonService.validationJoinRoom(dto, dto.getRoomId(), dto.getRoomPassword());
-        System.out.println(ResponseEntity.ok(result));
-        return ResponseEntity.ok(result);
+        Boolean result= true ;
+        try{
+            result =  this.commonService.validationJoinRoom(dto, dto.getRoomId(), dto.getRoomPassword());
+            System.out.println(ResponseEntity.ok(result));
+
+        }catch(CustomException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getErrorCode());
+            System.out.println(e);
+
+            return ResponseEntity.badRequest().body(e.getErrorCode().getDetail());
+        }
+        return ResponseEntity.ok().build();
     }
 
     // 방 나가기 + 방 삭제
