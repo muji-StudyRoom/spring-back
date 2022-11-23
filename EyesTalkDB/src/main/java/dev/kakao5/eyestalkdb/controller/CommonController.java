@@ -8,6 +8,7 @@ import dev.kakao5.eyestalkdb.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,15 @@ public class CommonController {
         CommonDto result =  this.commonService.enterRoom(dto, roomId, roomPassword);
         return ResponseEntity.ok(result);
     }
+    // 방 입장 검증
+    @GetMapping("/valid/enter")
+    public ResponseEntity<Boolean> validationJoinRoom(@RequestBody CommonDto dto){
 
-
+        logger.info("recive");
+        Boolean result = this.commonService.validationJoinRoom(dto, dto.getRoomId(), dto.getRoomPassword());
+        System.out.println(ResponseEntity.ok(result));
+        return ResponseEntity.ok(result);
+    }
 
     // 방 나가기 + 방 삭제
     @PatchMapping("/{roomId}")

@@ -199,4 +199,16 @@ public class CommonService {
     }
 
 
+    public Boolean validationJoinRoom(CommonDto dto, Long roomId, String roomPassword) {
+        RoomEntity roomEntity = roomRepository.findById(roomId).get();
+        if(!roomEntity.getRoomPassword().equals(roomPassword)){
+            return false;
+        }
+
+        UserEntity user = userRepository.findUserEntityByRoomEntityAndUserNickname(roomEntity, dto.getUserNickname());
+        if (user == null) {
+            return true;
+        }
+        return false;
+    }
 }
