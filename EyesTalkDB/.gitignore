@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 
 
+
 ### STS ###
 application-test1.yml
 .apt_generated
@@ -27,6 +28,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+/src/main/resources
 
 ### NetBeans ###
 /nbproject/private/
