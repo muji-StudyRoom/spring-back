@@ -30,7 +30,7 @@ public class UserEntity {
     @JoinColumn(name = "room_idx")
     private RoomEntity roomEntity;
 
-    @JoinColumn(name="socket_id")
+    @Column(name="socket_id")
     private String socketId;
 
     protected UserEntity() {
