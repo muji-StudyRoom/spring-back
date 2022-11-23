@@ -2,6 +2,7 @@ package dev.kakao5.eyestalkdb.controller;
 
 
 import dev.kakao5.eyestalkdb.dto.CommonDto;
+import dev.kakao5.eyestalkdb.dto.RoomDto;
 import dev.kakao5.eyestalkdb.dto.UserDto;
 import dev.kakao5.eyestalkdb.service.CommonService;
 import dev.kakao5.eyestalkdb.service.UserServiceImpl;
@@ -39,8 +40,9 @@ public class CommonController {
         CommonDto result =  this.commonService.enterRoom(dto, roomId, roomPassword);
         return ResponseEntity.ok(result);
     }
-    // 방 입장 검증
-    @GetMapping("/valid/enter")
+
+    // 방 입장 검증 => 이후 exception 으로 리펙토링 해야할듯
+    @PostMapping("/valid/enter")
     public ResponseEntity<Boolean> validationJoinRoom(@RequestBody CommonDto dto){
 
         logger.info("recive");

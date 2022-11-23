@@ -1,7 +1,9 @@
 package dev.kakao5.eyestalkdb.controller;
 
 import dev.kakao5.eyestalkdb.dto.RoomDto;
+import dev.kakao5.eyestalkdb.exception.CustomException;
 import dev.kakao5.eyestalkdb.service.RoomServiceImpl;
+import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +52,14 @@ public class RoomController {
         }
         return ResponseEntity.ok(roomDtoList);
     }
-
-
-
+    // 방 생성 검증
+    @PostMapping("/valid/create")
+    public ResponseEntity<Boolean> validationCreateRoom(@RequestBody RoomDto dto){
+        try{
+            RoomDto roomDto = this.roomService.searchRoom(dto.getRoomName());
+        }catch (CustomException e){
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
+    }
 }
