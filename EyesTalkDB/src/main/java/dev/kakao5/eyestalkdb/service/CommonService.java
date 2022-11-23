@@ -201,10 +201,12 @@ public class CommonService {
 
     public Boolean validationJoinRoom(CommonDto dto, Long roomId, String roomPassword) {
         RoomEntity roomEntity = roomRepository.findById(roomId).get();
+        if(roomEntity.getRoomCapacity() == roomEntity.getRoomEnterUser()){
+            throw new CustomException((ErrorCode.FULL_CAPACITY));
+        }
         if(!roomEntity.getRoomPassword().equals(roomPassword)){
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
-
         UserEntity user = userRepository.findUserEntityByRoomEntityAndUserNickname(roomEntity, dto.getUserNickname());
         if (user == null) {
             return true;
