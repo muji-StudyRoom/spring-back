@@ -66,7 +66,7 @@ public class CommonController {
     }
 
     // 방 나가기 + 방 삭제 => socketId 로 로직처리하도록 실행
-    @PatchMapping()
+    @PostMapping("/test")
     public ResponseEntity<?> closeRoom(@RequestParam String socketId ){
         return ResponseEntity.ok(commonService.closeRoom(socketId));
     }

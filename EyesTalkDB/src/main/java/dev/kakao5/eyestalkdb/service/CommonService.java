@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class CommonService {
 //        if (userRepository.existsByUserNickname(dto.getUserNickname())){
 //            throw new CustomException(ErrorCode.INVALID_NICKNAME);
 //        }
-
+        // 수정 필요 - userNickname 은 유니크 값이 아니기 때문에 여러개의 유저를 반환할 수도 있음
         UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
 
         //없으면 room 생성
@@ -175,8 +176,10 @@ public class CommonService {
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
 
         // userId check
-        if(!userRepository.existsBySocketId(socketId))
+        System.out.println(userRepository.existsBySocketId(socketId));
+        if(!userRepository.existsBySocketId(socketId)) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
 
         // 인원 검사 {지정인원이 0이면 방 삭제, 허용인원보다 적고 0이 아니면 -1}
         if(room.get().getRoomEnterUser() > 1){
@@ -194,8 +197,9 @@ public class CommonService {
             userRepository.delete(userEntity.get());
         }else{
             //유저 삭제, 방 삭제 동시 진행
-            roomRepository.delete(room.get());
             userRepository.delete(userEntity.get());
+            roomRepository.delete(room.get());
+
         }
         return true;
     }
