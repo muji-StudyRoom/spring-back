@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public List<UserDto> getUserInRoom(Long roomId) {
-        List<UserEntity> userEntities = userRepository.findAllByRoomEntity(roomId);
+    public List<UserDto> getUserInRoom(String roomName) {
+        List<UserEntity> userEntities = userRepository.findAllByRoomEntity(roomName);
 
         List<UserDto> userDtoList = userEntities.stream()
                 .map(m-> UserDto.builder()

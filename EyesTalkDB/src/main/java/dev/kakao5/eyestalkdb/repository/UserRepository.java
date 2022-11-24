@@ -18,8 +18,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findUserEntityByRoomEntityAndUserNickname(RoomEntity room, String userNickname);
 
-    @Query("select u from UserEntity u join u.roomEntity r where r.roomId = :roomId")
-    List<UserEntity> findAllByRoomEntity(Long roomId);
+    @Query("select u from UserEntity u join u.roomEntity r where r.roomName = :roomName")
+    List<UserEntity> findAllByRoomEntity(String roomName);
 
     Optional<UserEntity> findBySocketId(String socketId);
 

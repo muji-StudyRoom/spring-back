@@ -37,11 +37,11 @@ public class CommonController {
     }
 
     // 방 입장 + 유저 생성
-    @PostMapping("/{roomId}/enter/{roomPassword}")
+    @PostMapping("/{roomName}/enter/{roomPassword}")
     public ResponseEntity<CommonDto> enterRoom(@RequestBody UserDto dto,
-                                               @PathVariable("roomId") Long roomId,
+                                               @PathVariable("roomName") String roomName,
                                                @PathVariable("roomPassword") String roomPassword ){
-        CommonDto result =  this.commonService.enterRoom(dto, roomId, roomPassword);
+        CommonDto result =  this.commonService.enterRoom(dto, roomName, roomPassword);
         return ResponseEntity.ok(result);
     }
 
@@ -66,7 +66,7 @@ public class CommonController {
     }
 
     // 방 나가기 + 방 삭제 => socketId 로 로직처리하도록 실행
-    @PostMapping("/test")
+    @PostMapping("/exit")
     public ResponseEntity<?> closeRoom(@RequestParam String socketId ){
         return ResponseEntity.ok(commonService.closeRoom(socketId));
     }

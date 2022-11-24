@@ -14,10 +14,10 @@ import java.util.List;
 public class UserController {
     private final UserServiceImpl userService;
 
-    @GetMapping("/{roomId}")
-    public ResponseEntity<List<UserDto>> getUserInRoom(@PathVariable Long roomId) {
-        System.out.println(roomId);
-        return ResponseEntity.ok(userService.getUserInRoom(roomId));
+    @GetMapping("/{roomName}")
+    public ResponseEntity<List<UserDto>> getUserInRoom(@PathVariable String roomName) {
+        System.out.println(roomName);
+        return ResponseEntity.ok(userService.getUserInRoom(roomName));
     }
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto dto){

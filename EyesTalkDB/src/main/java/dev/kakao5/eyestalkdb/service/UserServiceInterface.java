@@ -13,5 +13,5 @@ public interface UserServiceInterface {
     // 유저 삭제
     boolean deleteUser(Long userId);
 
-    List<UserDto> getUserInRoom(Long roomId);
+    List<UserDto> getUserInRoom(String roomName);
 }
