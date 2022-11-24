@@ -28,13 +28,20 @@ public class CommonController {
 
     private final UserServiceImpl userService;
 
-    //방 생성 + 유저 생성
+    //방 생성
     @PostMapping
     public ResponseEntity<CommonDto> createRoom(@RequestBody CommonDto dto){
         CommonDto resultRoom = this.commonService.createRoom(dto);
-        CommonDto result  = this.commonService.createUser(resultRoom);
+        return ResponseEntity.ok(resultRoom);
+    }
+
+    // 유저 생성
+    @PostMapping("/user")
+    public ResponseEntity<CommonDto> creatUser(@RequestBody CommonDto dto){
+        CommonDto result  = this.commonService.createUser(dto);
         return ResponseEntity.ok(result);
     }
+
 
     // 방 입장 + 유저 생성
     @PostMapping("/{roomName}/enter/{roomPassword}")
