@@ -40,7 +40,7 @@ public class CommonService {
                 .roomName(dto.getRoomName())
                 .roomPassword(dto.getRoomPassword())
                 .roomCapacity(dto.getRoomCapacity())
-                .roomEnterUser(1)
+                .roomEnterUser(0)
                 .roomCreateAt(LocalDateTime.now())
                 .build();
         // 수정 필요 - userNickname 은 유니크 값이 아니기 때문에 여러개의 유저를 반환할 수도 있음
