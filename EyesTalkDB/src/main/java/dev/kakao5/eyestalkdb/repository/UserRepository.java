@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByUserNickname(String useNickname);
+
+
+    boolean existsByRoomEntityAndUserNickname(RoomEntity room, String userNickname);
     boolean existsBySocketId(String socketId);
 
     UserEntity findUserEntityByRoomEntityAndUserNickname(RoomEntity room, String userNickname);
