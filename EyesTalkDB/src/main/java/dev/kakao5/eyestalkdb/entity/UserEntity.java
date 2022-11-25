@@ -23,6 +23,9 @@ public class UserEntity {
     @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     private LocalDateTime userCreateAt;
 
+
+
+    // Eager 로 변경하여서 해결 => 다른 방법은 없는가?
     @ManyToOne(
             fetch = FetchType.LAZY,
             targetEntity = RoomEntity.class
@@ -30,7 +33,7 @@ public class UserEntity {
     @JoinColumn(name = "room_idx")
     private RoomEntity roomEntity;
 
-    @JoinColumn(name="socket_id")
+    @Column(name="socket_id")
     private String socketId;
 
     protected UserEntity() {

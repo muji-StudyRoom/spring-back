@@ -75,7 +75,7 @@ public class RoomServiceImpl implements RoomServiceInterface {
 
     @Override
     @Transactional(readOnly = true)
-    public RoomDto searchRoom(String room_name) {
+    public RoomDto searchRoom(String room_name) throws CustomException {
         RoomEntity findRoom = roomRepository.findByRoomName(room_name);
         if(findRoom == null){
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
@@ -91,4 +91,6 @@ public class RoomServiceImpl implements RoomServiceInterface {
                 .build();
         return roomDto;
     }
+
+
 }
