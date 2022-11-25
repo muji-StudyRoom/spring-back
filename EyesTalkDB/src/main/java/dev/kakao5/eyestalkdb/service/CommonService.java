@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -34,21 +35,20 @@ public class CommonService {
 //        if (userRepository.existsByUserNickname(dto.getUserNickname())){
 //            throw new CustomException(ErrorCode.INVALID_NICKNAME);
 //        }
-
-        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
-
         //없으면 room 생성
         RoomEntity createRoom = RoomEntity.builder()
                 .roomName(dto.getRoomName())
                 .roomPassword(dto.getRoomPassword())
                 .roomCapacity(dto.getRoomCapacity())
-                .roomEnterUser(1)
+                .roomEnterUser(0)
                 .roomCreateAt(LocalDateTime.now())
                 .build();
-
+        // 수정 필요 - userNickname 은 유니크 값이 아니기 때문에 여러개의 유저를 반환할 수도 있음
+        // roomId
+        //UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
 
         RoomEntity roomSave = roomRepository.save(createRoom);
-
+/*
         if(duplicateUser!=null){
             System.out.println("로그 :"+duplicateUser.getRoomEntity().getRoomId()+ " "+ createRoom.getRoomId());
         }
@@ -57,7 +57,7 @@ public class CommonService {
             //지워야 함 (room)
             roomRepository.delete(createRoom);
             throw new CustomException(ErrorCode.INVALID_NICKNAME);
-        }
+        }*/
 
         logger.info("방 허용 입력값: {}", createRoom.getRoomCapacity());
         logger.info("방 입장인원 입력값: {}", createRoom.getRoomEnterUser());
@@ -82,10 +82,10 @@ public class CommonService {
     public CommonDto createUser(CommonDto dto){
 
         // 닉네임 중복 검사
-        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
-        if(duplicateUser!=null && duplicateUser.getRoomEntity().getRoomId().equals(dto.getRoomId())){
-            throw new CustomException(ErrorCode.INVALID_NICKNAME);
-        }
+//        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
+//        if(duplicateUser!=null && duplicateUser.getRoomEntity().getRoomId().equals(dto.getRoomId())){
+//            throw new CustomException(ErrorCode.INVALID_NICKNAME);
+//        }
 
         // 유저 생성 (방장)
         RoomEntity room = roomRepository.findById(dto.getRoomId()).get();
@@ -111,22 +111,26 @@ public class CommonService {
     }
 
     // room enter 시 user 생성
-    public CommonDto enterRoom(UserDto dto, Long roomId,String roomPassword){
+    public CommonDto enterRoom(UserDto dto, String roomName,String roomPassword){
         // room id 확인
-        if (!roomRepository.existsById(roomId))
+        if (!roomRepository.existsByRoomName(roomName))
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
 
         // room 찾기
-        RoomEntity room = roomRepository.findById(roomId).get();
+        RoomEntity room = roomRepository.findByRoomName(roomName);
 
         // 비밀번호 확인
         if(!room.getRoomPassword().equals(roomPassword)){
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        // 닉네임 중복 검사
-        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
-        if(duplicateUser!=null && duplicateUser.getRoomEntity().getRoomId().equals(roomId)){
+//        // 닉네임 중복 검사
+//        UserEntity duplicateUser = userRepository.findByUserNickname(dto.getUserNickname());
+//        if(duplicateUser!=null && duplicateUser.getRoomEntity().getRoomId().equals(roomId)){
+//            throw new CustomException(ErrorCode.INVALID_NICKNAME);
+//        }
+        boolean duplicate = userRepository.existsByRoomEntityAndUserNickname(room, dto.getUserNickname());
+        if (duplicate) {
             throw new CustomException(ErrorCode.INVALID_NICKNAME);
         }
 
@@ -162,19 +166,23 @@ public class CommonService {
     }
 
 
-    //방 나가기 + 방 삭제
-    public boolean closeRoom(Long roomId, Long userId){
+    //방 나가기 + 방 삭제 => socketId 기준으로 로직처리 변경
+    public boolean closeRoom(String socketId){
         //todo: 코드 수정 필요
+
+        Optional<UserEntity> userEntity = userRepository.findBySocketId(socketId);
+        Long roomId = userEntity.get().getRoomEntity().getRoomId();
         Optional<RoomEntity> room = roomRepository.findById(roomId);
-        Optional<UserEntity> userEntity = userRepository.findById(userId);
 
         // roomId check
         if (!roomRepository.existsById(roomId))
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
 
         // userId check
-        if(!userRepository.existsById(userId))
+        System.out.println(userRepository.existsBySocketId(socketId));
+        if(!userRepository.existsBySocketId(socketId)) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
 
         // 인원 검사 {지정인원이 0이면 방 삭제, 허용인원보다 적고 0이 아니면 -1}
         if(room.get().getRoomEnterUser() > 1){
@@ -192,8 +200,9 @@ public class CommonService {
             userRepository.delete(userEntity.get());
         }else{
             //유저 삭제, 방 삭제 동시 진행
-            roomRepository.delete(room.get());
             userRepository.delete(userEntity.get());
+            roomRepository.delete(room.get());
+
         }
         return true;
     }
@@ -201,14 +210,16 @@ public class CommonService {
 
     public Boolean validationJoinRoom(CommonDto dto, Long roomId, String roomPassword) {
         RoomEntity roomEntity = roomRepository.findById(roomId).get();
-        if(!roomEntity.getRoomPassword().equals(roomPassword)){
-            return false;
+        if(roomEntity.getRoomCapacity() == roomEntity.getRoomEnterUser()){
+            throw new CustomException((ErrorCode.FULL_CAPACITY));
         }
-
+        if(!roomEntity.getRoomPassword().equals(roomPassword)){
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
         UserEntity user = userRepository.findUserEntityByRoomEntityAndUserNickname(roomEntity, dto.getUserNickname());
         if (user == null) {
             return true;
         }
-        return false;
+        throw new CustomException(ErrorCode.INVALID_NICKNAME);
     }
 }

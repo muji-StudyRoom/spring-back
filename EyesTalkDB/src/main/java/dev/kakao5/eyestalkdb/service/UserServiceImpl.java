@@ -6,10 +6,13 @@ import dev.kakao5.eyestalkdb.exception.CustomException;
 import dev.kakao5.eyestalkdb.exception.ErrorCode;
 import dev.kakao5.eyestalkdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,6 +49,21 @@ public class UserServiceImpl implements UserServiceInterface{
         Optional<UserEntity> userEntity = userRepository.findById(userId);
         userRepository.delete(userEntity.get());
         return true;
+    }
+
+    @Override
+    public List<UserDto> getUserInRoom(String roomName) {
+        List<UserEntity> userEntities = userRepository.findAllByRoomEntity(roomName);
+
+        List<UserDto> userDtoList = userEntities.stream()
+                .map(m-> UserDto.builder()
+                                .userId(m.getUserId())
+                                .userNickname(m.getUserNickname())
+                                .userCreateAt(m.getUserCreateAt())
+                                .socketId(m.getSocketId())
+                                .build()
+                ).collect(Collectors.toList());
+        return userDtoList;
     }
 
 
