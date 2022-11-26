@@ -10,4 +10,4 @@ ADD Eyes-talk-db-0.0.1-SNAPSHOT.jar spring-app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/spring-app.jar", "-Dspring-boot.run.arguments=--DATABASE-USERNAME=${DATABASE-USERNAME}, --DATABASE-PASSWORD=${DATABASE-PASSWORD}"]]
+ENTRYPOINT ["java", "-jar", "/spring-app.jar", "-Dspring-boot.run.arguments=--SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}, --SPRING_DATABASE_USERNAME=${SPRING_DATABASE_USERNAME}, --SPRING_DATABASE_PASSWORD=${SPRING_DATABASE_PASSWORD}"]]
