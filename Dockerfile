@@ -1,8 +1,8 @@
-FROM gradle:jdk11-alpine AS builder
+FROM gradle:7.5.1-jdk11-alpine AS builder
 COPY ./EyesTalkDB ./EyesTalkDB
 WORKDIR ./EyesTalkDB
 RUN chmod +x ./gradlew
-RUN ./gradlew bootJAR
+RUN ./gradlew bootJar
 
 
 FROM openjdk:11-jre-slim
