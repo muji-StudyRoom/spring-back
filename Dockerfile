@@ -7,7 +7,7 @@ RUN ./gradlew bootJar
 
 FROM openjdk:11-jre-slim
 
-COPY --from=builder ./EyesTalkDB/build/libs/Eyes-talk-db-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder ./build/libs/Eyes-talk-db-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
