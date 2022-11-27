@@ -1,12 +1,16 @@
-FROM openjdk:11-jdk AS builder
+FROM gradle:jdk11-alpine AS builder
+COPY ./EysTalkDB/gradlew .
+COPY ./EysTalkDB/gradle gradle
+COPY ./EysTalkDB/build.gradle .
+COPY ./EysTalkDB/settings.gradle .
+COPY ./EysTalkDB/src src
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJAR
 
-RUN apt-get -y update && apt-get -y install default-jre && \
-        apt-get clean -y && \
-        apt-get autoremove -y && \
-        rm -rfv /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
+FROM openjdk:11-jre-slim
 
-ADD Eyes-talk-db-0.0.1-SNAPSHOT.jar spring-app.jar
+COPY --from=builder build/libs/*.jar app.jar
 
 EXPOSE 8080
 
