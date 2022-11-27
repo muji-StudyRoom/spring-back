@@ -111,16 +111,16 @@ public class CommonService {
     }
 
     // room enter 시 user 생성
-    public CommonDto enterRoom(UserDto dto, String roomName,String roomPassword){
+    public CommonDto enterRoom(CommonDto dto){
         // room id 확인
-        if (!roomRepository.existsByRoomName(roomName))
+        if (!roomRepository.existsByRoomName(dto.getRoomName()))
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
 
         // room 찾기
-        RoomEntity room = roomRepository.findByRoomName(roomName);
+        RoomEntity room = roomRepository.findByRoomName(dto.getRoomName());
 
         // 비밀번호 확인
-        if(!room.getRoomPassword().equals(roomPassword)){
+        if(!room.getRoomPassword().equals(dto.getRoomPassword())){
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 

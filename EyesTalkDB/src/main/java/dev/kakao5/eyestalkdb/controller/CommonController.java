@@ -44,11 +44,9 @@ public class CommonController {
 
 
     // 방 입장 + 유저 생성
-    @PostMapping("/{roomName}/enter/{roomPassword}")
-    public ResponseEntity<CommonDto> enterRoom(@RequestBody UserDto dto,
-                                               @PathVariable("roomName") String roomName,
-                                               @PathVariable("roomPassword") String roomPassword ){
-        CommonDto result =  this.commonService.enterRoom(dto, roomName, roomPassword);
+    @PostMapping("/enter")
+    public ResponseEntity<CommonDto> enterRoom(@RequestBody CommonDto dto){
+        CommonDto result =  this.commonService.enterRoom(dto);
         return ResponseEntity.ok(result);
     }
 

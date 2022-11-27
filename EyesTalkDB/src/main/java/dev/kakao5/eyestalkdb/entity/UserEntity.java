@@ -25,7 +25,7 @@ public class UserEntity {
 
 
 
-    // Eager 로 변경하여서 해결 => 다른 방법은 없는가?
+    // POST Method 로 변경하여 해결
     @ManyToOne(
             fetch = FetchType.LAZY,
             targetEntity = RoomEntity.class
