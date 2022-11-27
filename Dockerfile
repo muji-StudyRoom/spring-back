@@ -1,9 +1,9 @@
 FROM gradle:jdk11-alpine AS builder
-COPY ./EysTalkDB/gradlew .
-COPY ./EysTalkDB/gradle gradle
-COPY ./EysTalkDB/build.gradle .
-COPY ./EysTalkDB/settings.gradle .
-COPY ./EysTalkDB/src src
+COPY ./EyesTalkDB/gradlew .
+COPY ./EyesTalkDB/gradle gradle
+COPY ./EyesTalkDB/build.gradle .
+COPY ./EyesTalkDB/settings.gradle .
+COPY ./EyesTalkDB/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJAR
 
