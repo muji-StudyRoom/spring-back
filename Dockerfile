@@ -7,7 +7,7 @@ RUN ./gradlew bootJAR
 
 FROM openjdk:11-jre-slim
 
-COPY --from=builder build/libs/*.jar app.jar
+COPY --from=builder ./build/libs/*.jar app.jar
 
 EXPOSE 8080
 
