@@ -91,6 +91,27 @@ public class RoomServiceImpl implements RoomServiceInterface {
                 .build();
         return roomDto;
     }
+    @Override
+    @Transactional(readOnly = true)
+    public List<RoomDto> searchRoomList(String room_name) throws CustomException {
+        List<RoomEntity> roomEntities = roomRepository.findByRoomNameContaining(room_name);
+
+        //RoomEntity findRoom = roomRepository.findByRoomName(room_name);
+        if(roomEntities == null){
+            throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
+        }
+        List<RoomDto> roomDtoList = roomEntities.stream()
+                .map(m->RoomDto.builder()
+                        .roomId(m.getRoomId())
+                        .roomName(m.getRoomName())
+                        .roomPassword(m.getRoomPassword())
+                        .roomCapacity(m.getRoomCapacity())
+                        .roomEnterUser(m.getRoomEnterUser())
+                        .roomCreateAt(m.getRoomCreateAt())
+                        .build()
+                ).collect(Collectors.toList());
+        return roomDtoList;
+    }
 
 
 }
