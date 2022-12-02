@@ -9,6 +9,7 @@ import dev.kakao5.eyestalkdb.exception.ErrorCode;
 import dev.kakao5.eyestalkdb.repository.RoomRepository;
 import dev.kakao5.eyestalkdb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -111,7 +113,7 @@ public class CommonService {
     }
 
     // room enter 시 user 생성
-    public CommonDto enterRoom(CommonDto dto){
+    public JSONObject enterRoom(CommonDto dto){
         // room id 확인
         if (!roomRepository.existsByRoomName(dto.getRoomName()))
             throw new CustomException(ErrorCode.ROOM_IS_EMPTY);
@@ -150,18 +152,32 @@ public class CommonService {
         UserEntity save = userRepository.save(createUser);
         room.setRoomEnterUser(room.getRoomEnterUser()+1);
 
-        CommonDto result = CommonDto.builder()
-                .userId(createUser.getUserId())
-                .userNickname(createUser.getUserNickname())
-                .userCreateAt(createUser.getUserCreateAt())
-                .roomId(room.getRoomId())
-                .roomPassword(room.getRoomPassword())
-                .roomCapacity(room.getRoomCapacity())
-                .roomEnterUser(room.getRoomEnterUser())
-                .roomCreateAt(room.getRoomCreateAt())
-                .socketId(dto.getSocketId())
-                .build();
-
+//        CommonDto result = CommonDto.builder()
+//                .userId(createUser.getUserId())
+//                .userNickname(createUser.getUserNickname())
+//                .userCreateAt(createUser.getUserCreateAt())
+//                .roomId(room.getRoomId())
+//                .roomPassword(room.getRoomPassword())
+//                .roomCapacity(room.getRoomCapacity())
+//                .roomEnterUser(room.getRoomEnterUser())
+//                .roomCreateAt(room.getRoomCreateAt())
+//                .socketId(dto.getSocketId())
+//                .build();
+        // 이 리턴값을 socketId:userNickName 으로 가진 json 형태로 반환하도록 변경해야할듯?
+        List<UserEntity> userEntities = userRepository.findAllByRoomEntity(room.getRoomId());
+        List<UserDto> userDtoList = userEntities.stream()
+                .map(m-> UserDto.builder()
+                        .userId(m.getUserId())
+                        .userNickname(m.getUserNickname())
+                        .userCreateAt(m.getUserCreateAt())
+                        .socketId(m.getSocketId())
+                        .build()
+                ).collect(Collectors.toList());
+        JSONObject result = new JSONObject();
+        for (UserDto user : userDtoList) {
+            result.put(user.getSocketId(), user.getUserNickname());
+        }
+        System.out.println(result);
         return result;
     }
 

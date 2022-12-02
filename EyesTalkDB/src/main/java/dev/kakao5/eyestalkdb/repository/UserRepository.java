@@ -2,6 +2,7 @@ package dev.kakao5.eyestalkdb.repository;
 
 import dev.kakao5.eyestalkdb.entity.RoomEntity;
 import dev.kakao5.eyestalkdb.entity.UserEntity;
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -21,6 +22,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("select u from UserEntity u join u.roomEntity r where r.roomName = :roomName")
     List<UserEntity> findAllByRoomEntity(String roomName);
 
+    @Query("select u from UserEntity u join u.roomEntity r where r.roomId = :roomId")
+    List<UserEntity> findAllByRoomEntity(Long roomId);
+
     Optional<UserEntity> findBySocketId(String socketId);
+
+
 
 }

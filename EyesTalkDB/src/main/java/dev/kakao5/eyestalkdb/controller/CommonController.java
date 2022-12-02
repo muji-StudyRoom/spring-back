@@ -9,6 +9,7 @@ import dev.kakao5.eyestalkdb.exception.ErrorResponse;
 import dev.kakao5.eyestalkdb.service.CommonService;
 import dev.kakao5.eyestalkdb.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
@@ -45,8 +46,8 @@ public class CommonController {
 
     // 방 입장 + 유저 생성
     @PostMapping("/enter")
-    public ResponseEntity<CommonDto> enterRoom(@RequestBody CommonDto dto){
-        CommonDto result =  this.commonService.enterRoom(dto);
+    public ResponseEntity<JSONObject> enterRoom(@RequestBody CommonDto dto){
+        JSONObject result = commonService.enterRoom(dto);
         return ResponseEntity.ok(result);
     }
 
