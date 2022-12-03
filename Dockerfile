@@ -1,13 +1,14 @@
-FROM openjdk:11-jdk AS builder
+FROM gradle:7.5.1-jdk11-alpine AS builder
+RUN pwd
+COPY ./EyesTalkDB ./EyesTalkDB
+WORKDIR ./EyesTalkDB
+RUN pwd
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJar
 
-RUN apt-get -y update && apt-get -y install default-jre && \
-        apt-get clean -y && \
-        apt-get autoremove -y && \
-        rm -rfv /tmp/* /var/lib/apt/lists/* /var/tmp/*
-
-
-ADD Eyes-talk-db-0.0.1-SNAPSHOT.jar spring-app.jar
+FROM openjdk:11-jre-slim
+COPY --from=builder /home/gradle/EyesTalkDB/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/spring-app.jar", "-Dspring-boot.run.arguments=--SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}, --SPRING_DATABASE_USERNAME=${SPRING_DATABASE_USERNAME}, --SPRING_DATABASE_PASSWORD=${SPRING_DATABASE_PASSWORD}"]]
+ENTRYPOINT ["java", "-jar", "./app.jar", "-Dspring-boot.run.arguments=—SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}, —SPRING_DATABASE_USERNAME=${SPRING_DATABASE_USERNAME}, —SPRING_DATABASE_PASSWORD=${SPRING_DATABASE_PASSWORD}"]]
