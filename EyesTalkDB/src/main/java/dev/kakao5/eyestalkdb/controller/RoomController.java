@@ -47,7 +47,7 @@ public class RoomController {
     @GetMapping("{roomName}")
     public ResponseEntity<List<RoomDto>> searchRoom(@PathVariable("roomName") String room_name){
         List<RoomDto> roomDtoList = this.roomService.searchRoomList(room_name);
-        if(roomDtoList == null){
+        if(roomDtoList.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(roomDtoList);
