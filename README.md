@@ -2,7 +2,7 @@
 
 
 ## Swagger
-![](https://velog.velcdn.com/images/jupiter-j/post/0eb6de91-be94-405f-8272-6b1e5aaad2b0/image.png)
+![image](https://user-images.githubusercontent.com/73453283/205673469-3d767d6f-c808-46de-9ee1-39ed7a3b5dc5.png)
 ## 기능 명세서
 <img width="969" alt="image" src="https://user-images.githubusercontent.com/73453283/203210421-be334875-c0de-4f61-9c7c-55784e682c98.png">
 
