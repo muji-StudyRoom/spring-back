@@ -1,4 +1,8 @@
-# spring-back
+# SpringBoot Server
+Signarling Server가 커넥션을 맺기 전에 유저 검증 및 방 생성 검증, 데이터베이스에 저장을 하기 위해 구축
+
+<br>
+<br>
 
 
 ## ☀️ Swagger
