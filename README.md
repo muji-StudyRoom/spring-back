@@ -1,12 +1,26 @@
-# SpringBoot Server
-Signarling Server가 커넥션을 맺기 전에 유저 검증 및 방 생성 검증, 데이터베이스에 저장을 하기 위해 구축
+# ☀️ SpringBoot Server
+- Signarling Server가 커넥션을 맺기 전에 유저 검증 및 방 생성 검증, 데이터베이스에 저장을 하기 위해 구축
+- Swagger을 통하여 프론트와 실시간 API 확인
+- 기능 명세서 & API 명세서 제작
+
 
 <br>
+
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=SpringBoot&logoColor=white"/> <img src="https://img.shields.io/badge/Swagger:3.0-47A248?style=flat-square&logo=Swagger&logoColor=white"/> <img src="https://img.shields.io/badge/JPA-F05032?style=flat-square&logoColor=white"> <img src="https://img.shields.io/badge/MariaDB-007396?style=flat-square&logo=mariadb&logoColor=white"/> 
+
 <br>
 
+##  ☀️ API 명세서
+| 기능  | Method | URI | Input Vlaue | Output Value |
+| --- | --- | --- | --- | --- |
+| 방 생성 | GET | /room | userNickname, roomName, roomPassword,roomCapacity |  userNickname, roomId, roomName, roomPassword,roomCapacity, roomEnterUser, roomCreateAt |
+| 방 검색 | POST | /room/{roomName} |  |  roomId, roomName, roomPassword, roomCapacity,roomEnterUser, roomCreateAt |
+| 방 입장 + 유저 생성 | PATCH | /room/enter  | userNickname, roomName, roomPassword,roomCapacity, socketId | socketId:userNickname|
+| 사용자 나가기 + 없으면 방 종료 | POST | /room/exit?socketId={socketId}  |  |  |
+| 사용자 방생성 검증 | POST | /room/valid/create | roomName | True/False |
+| 사용자 입장 검증 | POST | /room/valid/enter | userNickname, roomId,roomPassword | password_error, capacity_error, nickname_error |
+| 전체 방 조회 | GET | /room |  |  roomId, roomName, roomPassword, roomCapacity,roomEnterUser, roomCreateAt |
 
-## ☀️ Swagger
-![image](https://user-images.githubusercontent.com/73453283/205673469-3d767d6f-c808-46de-9ee1-39ed7a3b5dc5.png)
 <br>
 
 ## ☀️ 기능 명세서
@@ -46,6 +60,12 @@ Signarling Server가 커넥션을 맺기 전에 유저 검증 및 방 생성 검
 
 <br>
 
+## ☀️ Swagger
+![image](https://user-images.githubusercontent.com/73453283/205673469-3d767d6f-c808-46de-9ee1-39ed7a3b5dc5.png)
+
+
+<br>
+
 ## ☀️ 도커 실행 설정 
 
 ---
@@ -71,6 +91,7 @@ spring.jpa.generate-ddl=false
 spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 ```
+<br>
 
 ### DB Dockerfile
 
@@ -83,22 +104,29 @@ ENV MYSQL_DATABASE eyestalk
 CMD ["--character-set-server=utf8", "--collation-server=utf8_general_ci"]
 ```
 
+<br>
+
 ### Spring Boot Dockerfile
+- 자동으로 gradle에서 build하여 jar을 생성하도록 수정
 
 ```yaml
-FROM openjdk:11-jdk AS builder
+FROM gradle:7.5.1-jdk11-alpine AS builder
+RUN pwd
+COPY ./EyesTalkDB ./EyesTalkDB
+WORKDIR ./EyesTalkDB
+RUN pwd
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJar
 
-RUN apt-get -y update && apt-get -y install default-jre && \
-        apt-get clean -y && \
-        apt-get autoremove -y && \
-        rm -rfv /tmp/* /var/lib/apt/lists/* /var/tmp/*
-
-ADD Eyes-talk-db-0.0.1-SNAPSHOT.jar spring-app.jar
+FROM openjdk:11-jre-slim
+COPY --from=builder /home/gradle/EyesTalkDB/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/spring-app.jar", "-Dspring-boot.run.arguments=--DATABASE-USERNAME=${DATABASE-USERNAME}, --DATABASE-PASSWORD=${DATABASE-PASSWORD}"]]
+ENTRYPOINT ["java", "-jar", "./app.jar", "-Dspring-boot.run.arguments=—SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}, —SPRING_DATABASE_USERNAME=${SPRING_DATABASE_USERNAME}, —SPRING_DATABASE_PASSWORD=${SPRING_DATABASE_PASSWORD}"]]
 ```
+
+<br>
 
 ### build & run
 ```yaml
